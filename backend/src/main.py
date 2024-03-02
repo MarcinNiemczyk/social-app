@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+
 from src.database.engine import Base, engine
 
 app = FastAPI()
