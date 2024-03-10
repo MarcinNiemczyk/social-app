@@ -18,7 +18,7 @@ def register(user_in: UserRegister, db_session: Session = Depends(get_db)):
             status_code=status.HTTP_409_CONFLICT, detail="Email already exists"
         )
 
-    hashed_password = pwd_context.hash(user_in.password)
+    hashed_password = pwd_context.hash(user_in.password.get_secret_value())
 
     user = User(email=user_in.email, password=hashed_password)
     db_session.add(user)
@@ -28,7 +28,7 @@ def register(user_in: UserRegister, db_session: Session = Depends(get_db)):
 @auth_router.post("/login")
 def login(user_in: UserLogin, db_session: Session = Depends(get_db)):
     user = db_session.query(User).filter(User.email == user_in.email).one_or_none()
-    if not user or not pwd_context.verify(user_in.password, user.password):
+    if not user or not pwd_context.verify(user_in.password.get_secret_value(), user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
