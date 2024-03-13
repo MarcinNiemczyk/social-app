@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional, TypeVar
+from typing import Optional, TypeVar
 
 from sqlalchemy.orm import Session
 
+from src.auth.model import User
 from src.auth.schemas.model_schema import UserCreate
 
-if TYPE_CHECKING:
-    from src.auth.model import User
-
-    UserType = TypeVar("UserType", bound=User)
+UserType = TypeVar("UserType", bound=User)
 
 
 class IAuthRepository(ABC):
