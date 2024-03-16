@@ -16,6 +16,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 pydantic = {extras = ["email"], version = "^2.6.3"}
 pydantic-settings = "^2.2.1"
 bcrypt = "^4.1.2"
+pyjwt = "^2.8.0"
 
 
 [build-system]

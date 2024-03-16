@@ -13,3 +13,9 @@ class UserLogin(BaseModel):
 
 class UserRead(BaseModel):
     email: EmailStr
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
