@@ -20,3 +20,8 @@ def register(user_in: UserRegister, db_session: Session = Depends(get_db)) -> No
 def login(user_in: UserLogin, db_session: Session = Depends(get_db)) -> TokenResponse:
     auth_service.login(db_session, user_in)
     return auth_service.login(db_session, user_in)
+
+
+@auth_router.put("/refresh")
+def refresh(token: str) -> TokenResponse:
+    return auth_service.refresh_tokens(token)

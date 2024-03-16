@@ -8,6 +8,7 @@ from src.auth.schemas.endpoint_schema import TokenResponse, UserLogin, UserRegis
 from src.auth.schemas.model_schema import UserCreate
 from src.auth.utils import (
     check_password,
+    decode_jwt_token,
     get_access_token,
     get_refresh_token,
     hash_password,
@@ -36,6 +37,14 @@ class AuthService:
                 detail="Incorrect email or password",
             )
         return AuthService.generate_tokens_response(user.id)
+
+    @staticmethod
+    def refresh_tokens(token: str) -> TokenResponse:
+        data = decode_jwt_token(token)
+        if data.get("token_type") != "refresh":
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token")
+        user_id = UUID(data.get("sub"))
+        return AuthService.generate_tokens_response(user_id)
 
     @staticmethod
     def generate_tokens_response(user_id: UUID) -> TokenResponse:

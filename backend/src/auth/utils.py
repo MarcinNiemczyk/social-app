@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import bcrypt
 import jwt
+from fastapi import HTTPException, status
 from pydantic import SecretStr
 
 from src.config import config
@@ -37,3 +38,11 @@ def get_refresh_token(data: dict) -> str:
     })
     encoded_jwt = jwt.encode(to_encode, config.SECRET_KEY, config.ALGORITHM)
     return encoded_jwt
+
+
+def decode_jwt_token(token: str) -> dict:
+    try:
+        data = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    return data
