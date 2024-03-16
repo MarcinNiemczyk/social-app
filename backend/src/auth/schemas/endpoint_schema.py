@@ -15,6 +15,10 @@ class UserRead(BaseModel):
     email: EmailStr
 
 
+class Token(BaseModel):
+    token: str
+
+
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str

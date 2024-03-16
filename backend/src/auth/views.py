@@ -2,7 +2,12 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from src.auth.repositories.auth_repository import AuthRepository
-from src.auth.schemas.endpoint_schema import TokenResponse, UserLogin, UserRegister
+from src.auth.schemas.endpoint_schema import (
+    Token,
+    TokenResponse,
+    UserLogin,
+    UserRegister,
+)
 from src.auth.services.auth_service import AuthService
 from src.database.engine import get_db
 
@@ -23,5 +28,5 @@ def login(user_in: UserLogin, db_session: Session = Depends(get_db)) -> TokenRes
 
 
 @auth_router.put("/refresh")
-def refresh(token: str) -> TokenResponse:
-    return auth_service.refresh_tokens(token)
+def refresh(token_in: Token) -> TokenResponse:
+    return auth_service.refresh_tokens(token_in.token)
