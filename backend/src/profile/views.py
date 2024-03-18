@@ -5,13 +5,17 @@ from sqlalchemy.orm import Session
 
 from src.database.engine import get_db
 from src.profile.model import Profile
-from src.profile.schemas import ProfileCreate, ProfileRead, ProfileUpdate
+from src.profile.schemas.endpoint_schema import (
+    ProfileCreatePayload,
+    ProfileRead,
+    ProfileUpdatePayload,
+)
 
 profile_router = APIRouter()
 
 
 @profile_router.post("/", status_code=status.HTTP_201_CREATED)
-def create_profile(profile_in: ProfileCreate, db: Session = Depends(get_db)):
+def create_profile(profile_in: ProfileCreatePayload, db: Session = Depends(get_db)):
     profile = Profile(**profile_in.model_dump())
     db.add(profile)
     db.commit()
@@ -23,7 +27,7 @@ def list_profiles(db: Session = Depends(get_db)):
 
 
 @profile_router.put("/{id}", status_code=status.HTTP_200_OK)
-def update_profile(profile_id: UUID, profile_in: ProfileUpdate, db: Session = Depends(get_db)):
+def update_profile(profile_id: UUID, profile_in: ProfileUpdatePayload, db: Session = Depends(get_db)):
     profile = db.query(Profile).get(profile_id)
     if not profile:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")

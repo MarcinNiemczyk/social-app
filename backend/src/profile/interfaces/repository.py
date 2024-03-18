@@ -5,7 +5,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from src.profile.model import Profile
-from src.profile.schemas import ProfileCreate, ProfileUpdate
+from src.profile.schemas.model_schema import ProfileCreate, ProfileUpdate
 
 ProfileType = TypeVar("ProfileType", bound=Profile)
 
@@ -20,7 +20,7 @@ class IProfileRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, db: Session, profile_in: ProfileUpdate) -> None:
+    def update(self, db: Session, profile_in: ProfileUpdate, profile: ProfileType) -> None:
         raise NotImplementedError
 
     @abstractmethod

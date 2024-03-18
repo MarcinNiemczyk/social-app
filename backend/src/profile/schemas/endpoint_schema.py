@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 
 
-class ProfileCreate(BaseModel):
+class ProfileCreatePayload(BaseModel):
     display_name: str = Field(..., max_length=255)
     name: Optional[str] = Field(None, max_length=70)
     surname: Optional[str] = Field(None, max_length=70)
@@ -20,7 +20,7 @@ class ProfileRead(BaseModel):
     updated_at: Optional[datetime]
 
 
-class ProfileUpdate(BaseModel):
+class ProfileUpdatePayload(BaseModel):
     display_name: str = Field(..., max_length=255)
     name: Optional[str] = Field(None, max_length=70)
     surname: Optional[str] = Field(None, max_length=70)
