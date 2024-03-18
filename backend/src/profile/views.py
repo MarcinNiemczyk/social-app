@@ -7,7 +7,7 @@ from src.database.engine import get_db
 from src.profile.model import Profile
 from src.profile.schemas import ProfileCreate, ProfileRead, ProfileUpdate
 
-profile_router = APIRouter(prefix="/profiles", tags=["profiles"])
+profile_router = APIRouter()
 
 
 @profile_router.post("/", status_code=status.HTTP_201_CREATED)

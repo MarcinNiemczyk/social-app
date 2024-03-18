@@ -6,8 +6,8 @@ from src.database.engine import Base, engine
 from src.profile.views import profile_router
 
 app = FastAPI()
-app.include_router(auth_router)
-app.include_router(profile_router)
+app.include_router(auth_router, tags=["Authentication"])
+app.include_router(profile_router, prefix="/profiles", tags=["Profiles"])
 
 Base.metadata.create_all(bind=engine)
 
