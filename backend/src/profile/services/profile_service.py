@@ -20,7 +20,7 @@ class ProfileService:
 
     def list_profiles(self, db: Session) -> list[ProfileRead]:
         profiles = self.repository.get_all(db)
-        return [ProfileRead(**profile.__dict__) for profile in profiles]
+        return [ProfileRead.model_validate(profile) for profile in profiles]
 
     def update_profile(self, db: Session, profile_id: UUID, profile_in: ProfileUpdatePayload) -> None:
         profile = self.repository.get_by_id(db, profile_id)
@@ -28,4 +28,4 @@ class ProfileService:
 
     def get_profile(self, db: Session, profile_id: UUID) -> ProfileRead:
         profile = self.repository.get_by_id(db, profile_id)
-        return ProfileRead(**profile.__dict__)
+        return ProfileRead.model_validate(profile)
