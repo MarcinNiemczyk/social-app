@@ -1,15 +1,17 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from src.core.base_schema import CustomBaseModel
 
 
-class ProfileCreate(BaseModel):
+class ProfileCreate(CustomBaseModel):
     display_name: str = Field(..., max_length=255)
     name: Optional[str] = Field(None, max_length=70)
     surname: Optional[str] = Field(None, max_length=70)
 
 
-class ProfileUpdate(BaseModel):
+class ProfileUpdate(CustomBaseModel):
     display_name: str = Field(..., max_length=255)
     name: Optional[str] = Field(None, max_length=70)
     surname: Optional[str] = Field(None, max_length=70)

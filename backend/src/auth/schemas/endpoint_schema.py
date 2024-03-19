@@ -1,25 +1,27 @@
-from pydantic import BaseModel, EmailStr, SecretStr
+from pydantic import EmailStr, SecretStr
+
+from src.core.base_schema import CustomBaseModel
 
 
-class UserRegister(BaseModel):
+class UserRegister(CustomBaseModel):
     email: EmailStr
     password: SecretStr
 
 
-class UserLogin(BaseModel):
+class UserLogin(CustomBaseModel):
     email: EmailStr
     password: SecretStr
 
 
-class UserRead(BaseModel):
+class UserRead(CustomBaseModel):
     email: EmailStr
 
 
-class Token(BaseModel):
+class Token(CustomBaseModel):
     token: str
 
 
-class TokenResponse(BaseModel):
+class TokenResponse(CustomBaseModel):
     access_token: str
     refresh_token: str
     token_type: str
