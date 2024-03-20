@@ -10,13 +10,14 @@ from src.profile.schemas.endpoint_schema import (
     ProfileUpdatePayload,
 )
 from src.profile.services.profile_service import ProfileService
+from src.middleware.auth import must_be_logged_in
 
 profile_router = APIRouter()
 profile_repository = ProfileRepository()
 profile_service = ProfileService(profile_repository)
 
 
-@profile_router.post("/", status_code=status.HTTP_201_CREATED)
+@profile_router.post("/", status_code=status.HTTP_201_CREATED, dependencies=[Depends(must_be_logged_in)])
 def create_profile(profile_in: ProfileCreatePayload, db: Session = Depends(get_db)):
     return profile_service.create_profile(db, profile_in)
 
@@ -26,7 +27,7 @@ def list_profiles(db: Session = Depends(get_db)):
     return profile_service.list_profiles(db)
 
 
-@profile_router.put("/{id}", status_code=status.HTTP_200_OK)
+@profile_router.put("/{id}", status_code=status.HTTP_200_OK, dependencies=[Depends(must_be_logged_in)])
 def update_profile(profile_id: UUID, profile_in: ProfileUpdatePayload, db: Session = Depends(get_db)):
     return profile_service.update_profile(db, profile_id, profile_in)
 
