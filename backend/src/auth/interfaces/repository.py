@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional, TypeVar
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -16,4 +17,8 @@ class IAuthRepository(ABC):
 
     @abstractmethod
     def get_by_email(self, db: Session, email: str) -> Optional[UserType]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_by_id(self, db: Session, user_id: UUID) -> Optional[UserType]:
         raise NotImplementedError

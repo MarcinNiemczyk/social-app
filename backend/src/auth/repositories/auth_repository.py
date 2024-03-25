@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -15,3 +16,6 @@ class AuthRepository(IAuthRepository):
 
     def get_by_email(self, db: Session, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).one_or_none()
+
+    def get_by_id(self, db: Session, user_id: UUID) -> Optional[User]:
+        return db.query(User).get(user_id)

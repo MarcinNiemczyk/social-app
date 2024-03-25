@@ -1,7 +1,9 @@
 from uuid import UUID
 
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
+from src.auth.interfaces.repository import IAuthRepository
 from src.profile.interfaces.repository import IProfileRepository
 from src.profile.schemas.endpoint_schema import (
     ProfileCreatePayload,
@@ -12,10 +14,14 @@ from src.profile.schemas.model_schema import ProfileCreate, ProfileUpdate
 
 
 class ProfileService:
-    def __init__(self, repository: IProfileRepository):
+    def __init__(self, repository: IProfileRepository, auth_repository: IAuthRepository):
         self.repository = repository
+        self.auth_repository = auth_repository
 
     def create_profile(self, db: Session, profile_in: ProfileCreatePayload) -> None:
+        user = self.auth_repository.get_by_id(db, profile_in.user_id)
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
         self.repository.create(db, ProfileCreate(**profile_in.model_dump()))
 
     def list_profiles(self, db: Session) -> list[ProfileRead]:

@@ -9,6 +9,7 @@ from src.core.base_schema import CustomBaseModel
 
 class ProfileCreatePayload(CustomBaseModel):
     display_name: str = Field(..., max_length=255)
+    user_id: UUID
     name: Optional[str] = Field(None, max_length=70)
     surname: Optional[str] = Field(None, max_length=70)
 

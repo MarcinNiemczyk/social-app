@@ -3,18 +3,19 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+from src.auth.views import auth_repository
 from src.database.engine import get_db
+from src.middleware.auth import must_be_logged_in
 from src.profile.repositories.profile_repository import ProfileRepository
 from src.profile.schemas.endpoint_schema import (
     ProfileCreatePayload,
     ProfileUpdatePayload,
 )
 from src.profile.services.profile_service import ProfileService
-from src.middleware.auth import must_be_logged_in
 
 profile_router = APIRouter()
 profile_repository = ProfileRepository()
-profile_service = ProfileService(profile_repository)
+profile_service = ProfileService(profile_repository, auth_repository)
 
 
 @profile_router.post("/", status_code=status.HTTP_201_CREATED, dependencies=[Depends(must_be_logged_in)])
