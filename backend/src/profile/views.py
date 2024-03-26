@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.auth.views import auth_repository
 from src.database.engine import get_db
-from src.middleware.auth import must_be_logged_in
+from src.middleware.auth import get_user_id_from_token, must_be_logged_in
 from src.profile.repositories.profile_repository import ProfileRepository
 from src.profile.schemas.endpoint_schema import (
     ProfileCreatePayload,
@@ -19,8 +19,12 @@ profile_service = ProfileService(profile_repository, auth_repository)
 
 
 @profile_router.post("/", status_code=status.HTTP_201_CREATED, dependencies=[Depends(must_be_logged_in)])
-def create_profile(profile_in: ProfileCreatePayload, db: Session = Depends(get_db)):
-    return profile_service.create_profile(db, profile_in)
+def create_profile(
+        profile_in: ProfileCreatePayload,
+        db: Session = Depends(get_db),
+        user_id: UUID = Depends(get_user_id_from_token)
+):
+    return profile_service.create_profile(db, profile_in, user_id)
 
 
 @profile_router.get("/")

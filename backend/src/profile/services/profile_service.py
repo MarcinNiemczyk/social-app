@@ -18,11 +18,11 @@ class ProfileService:
         self.repository = repository
         self.auth_repository = auth_repository
 
-    def create_profile(self, db: Session, profile_in: ProfileCreatePayload) -> None:
-        user = self.auth_repository.get_by_id(db, profile_in.user_id)
+    def create_profile(self, db: Session, profile_in: ProfileCreatePayload, user_id: UUID) -> None:
+        user = self.auth_repository.get_by_id(db, user_id)
         if user is None:
             raise HTTPException(status_code=404, detail="User not found")
-        self.repository.create(db, ProfileCreate(**profile_in.model_dump()))
+        self.repository.create(db, ProfileCreate(**profile_in.model_dump(), user_id=user_id))
 
     def list_profiles(self, db: Session) -> list[ProfileRead]:
         profiles = self.repository.get_all(db)
