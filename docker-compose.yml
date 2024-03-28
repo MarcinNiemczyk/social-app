@@ -9,7 +9,20 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: socialapp
     ports:
-      - 5432:5432
+      - "5432:5432"
+    networks:
+      - backend
+
+  pgadmin:
+    container_name: psql_pgadmin_dev
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
     networks:
       - backend
 
