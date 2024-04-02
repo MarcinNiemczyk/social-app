@@ -2,10 +2,12 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from src.core.base_schema import CustomBaseModel
 
 
-class PostRead(BaseModel):
+class PostRead(CustomBaseModel):
     id: UUID
     content: str
     created_at: datetime
@@ -17,9 +19,9 @@ class PostRead(BaseModel):
         from_attributes = True
 
 
-class PostCreate(BaseModel):
+class PostCreatePayload(CustomBaseModel):
     content: str = Field(..., max_length=300)
 
 
-class PostUpdate(BaseModel):
+class PostUpdatePayload(CustomBaseModel):
     content: str = Field(..., max_length=300)
