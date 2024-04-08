@@ -1,40 +1,37 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from src.database.engine import get_db
+from src.post.repositories.post_repository import PostRepository
+from src.post.schemas.endpoint_schema import (
+    PostCreatePayload,
+    PostRead,
+    PostUpdatePayload,
+)
+from src.post.services.post_service import PostService
 
-from .models import Post
-from .schemas import PostCreate, PostRead, PostUpdate
-
-router = APIRouter()
-
-
-@router.get("/posts", response_model=list[PostRead])
-def get_posts(db: Session = Depends(get_db)):
-    return db.query(Post).all()
-
-
-@router.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post(post_in: PostCreate, db: Session = Depends(get_db)):
-    post = Post(content=post_in.content)
-    db.add(post)
-    db.commit()
+post_router = APIRouter()
+post_repository = PostRepository()
+post_service = PostService(post_repository)
 
 
-@router.get("/posts/{post_id}", status_code=status.HTTP_200_OK)
-def get_post(post_id: UUID, db: Session = Depends(get_db)):
-    return db.query(Post).get(post_id)
+@post_router.get("/posts")
+def get_posts(db: Session = Depends(get_db)) -> list[PostRead]:
+    return post_service.list_posts(db)
 
 
-@router.put("/posts/{post_id}", status_code=status.HTTP_200_OK)
-def update_post(post_id: UUID, post_in: PostUpdate, db: Session = Depends(get_db)):
-    post = db.query(Post).get(post_id)
-    if post is None:
-        return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+@post_router.post("/posts", status_code=status.HTTP_201_CREATED)
+def create_post(post_in: PostCreatePayload, db: Session = Depends(get_db)) -> None:
+    return post_service.create_post(db, post_in)
 
-    for key, value in post_in.model_dump().items():
-        setattr(post, key, value)
 
-    db.commit()
+@post_router.get("/posts/{post_id}")
+def get_post(post_id: UUID, db: Session = Depends(get_db)) -> PostRead:
+    return post_service.get_post(db, post_id)
+
+
+@post_router.put("/posts/{post_id}", status_code=status.HTTP_200_OK)
+def update_post(post_id: UUID, post_in: PostUpdatePayload, db: Session = Depends(get_db)) -> None:
+    return post_service.update_post(db, post_id, post_in)
