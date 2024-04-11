@@ -24,3 +24,6 @@ class PostRepository(IPostRepository):
 
     def get_by_id(self, db: Session, post_id: UUID) -> Post | None:
         return db.query(Post).get(post_id)
+
+
+post_repository = PostRepository()

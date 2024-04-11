@@ -3,10 +3,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from src.auth.views import auth_repository
+from src.auth.repositories.auth_repository import auth_repository
 from src.database.engine import get_db
 from src.middleware.auth import get_user_id_from_token, must_be_logged_in
-from src.profile.repositories.profile_repository import ProfileRepository
+from src.profile.repositories.profile_repository import profile_repository
 from src.profile.schemas.endpoint_schema import (
     ProfileCreatePayload,
     ProfileUpdatePayload,
@@ -14,7 +14,6 @@ from src.profile.schemas.endpoint_schema import (
 from src.profile.services.profile_service import ProfileService
 
 profile_router = APIRouter()
-profile_repository = ProfileRepository()
 profile_service = ProfileService(profile_repository, auth_repository)
 
 

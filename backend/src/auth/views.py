@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from src.auth.repositories.auth_repository import AuthRepository
+from src.auth.repositories.auth_repository import auth_repository
 from src.auth.schemas.endpoint_schema import (
     Token,
     TokenResponse,
@@ -12,7 +12,6 @@ from src.auth.services.auth_service import AuthService
 from src.database.engine import get_db
 
 auth_router = APIRouter()
-auth_repository = AuthRepository()
 auth_service = AuthService(repository=auth_repository)
 
 

@@ -19,3 +19,6 @@ class AuthRepository(IAuthRepository):
 
     def get_by_id(self, db: Session, user_id: UUID) -> Optional[User]:
         return db.query(User).get(user_id)
+
+
+auth_repository = AuthRepository()

@@ -24,3 +24,6 @@ class ProfileRepository(IProfileRepository):
 
     def get_by_id(self, db: Session, profile_id: UUID) -> Optional[Profile]:
         return db.query(Profile).get(profile_id)
+
+
+profile_repository = ProfileRepository()

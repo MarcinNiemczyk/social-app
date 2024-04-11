@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from src.database.engine import get_db
-from src.post.repositories.post_repository import PostRepository
+from src.post.repositories.post_repository import post_repository
 from src.post.schemas.endpoint_schema import (
     PostCreatePayload,
     PostRead,
@@ -13,7 +13,6 @@ from src.post.schemas.endpoint_schema import (
 from src.post.services.post_service import PostService
 
 post_router = APIRouter()
-post_repository = PostRepository()
 post_service = PostService(post_repository)
 
 
