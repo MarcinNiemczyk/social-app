@@ -37,3 +37,7 @@ lint.select = [
 lint.ignore = [
     'E501',
 ]
+
+[tool.mypy]
+
+mypy_path = 'src'
